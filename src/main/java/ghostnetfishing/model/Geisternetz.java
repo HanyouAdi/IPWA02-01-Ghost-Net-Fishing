@@ -1,48 +1,46 @@
 package ghostnetfishing.model;
 
-import java.util.Date;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import java.time.LocalDateTime;
 
-//@Entity
+import jakarta.persistence.*;
+
+@Entity
 public class Geisternetz {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
+	private Long id;
 	private Double lat; //latitude / Breitengrad
 	private Double lon; //logitude / Längengrad
-	private Date lokalisiertAm;
-	private int geschaetzteGroesse;
+	private LocalDateTime gemeldetAm; // Zeitpunkt, an dem das Geisternetz gemeldet wurde;
+	@Column(nullable = false)
+	private Integer geschaetzteGroesse; // Integer statt int, damit null Werte möglich sind, falls die Größe nicht geschätzt werden kann oder nicht angegeben wurde.
 
 	//ENUM Klasse, weil würde man String nehmen, könnten falsche Werte eingegeben werden, diese müssten validiert werden. Das spart man sich damit.
 	@Enumerated(EnumType.STRING) // Sorgt dafür, dass der ENUM Wert als String abgelegt wird und nicht als Zahl (z.B. 0 = Gemeldet, 2 = Geborgen). Das kann zu falschen interpretationen führen, wenn die Reihenfolge geändert wird.
     private Status status;
 
-    //@ManyToOne
-    //@JoinColumn(name = "meldende_person_id")
+	// Ein Geisternetz kann von einer Person gemeldet werden, aber eine Person kann auch mehrere Geisternetze melden. Daher N:1
+    @ManyToOne(cascade = CascadeType.PERSIST) //CascadeType.PERSIST = Beim Speichern des Geisternetzes wird eine neue zugehörige Person automatisch mitgespeichert.
+    @JoinColumn(name = "meldende_person_id") 
     private Person meldendePerson;
 
-    //@ManyToOne
-    //@JoinColumn(name = "bergende_person_id")
+    @ManyToOne
+    @JoinColumn(name = "bergende_person_id")
     private Person bergendePerson;
 
-    //@ManyToOne
-    //@JoinColumn(name = "verschollen_gemeldet_von_id")
+    @ManyToOne
+    @JoinColumn(name = "verschollen_gemeldet_von_id")
     private Person verschollenGemeldetVon;
 	
 	public Geisternetz() {
 
 	}
 	
-	public Geisternetz(Double lat, Double lon, Date lokalisiertAm, int geschaetzteGroesse) {
+	public Geisternetz(Double lat, Double lon, LocalDateTime gemeldetAm, Integer geschaetzteGroesse) {
 		this.lat = lat;
 		this.lon = lon;
-		this.lokalisiertAm = lokalisiertAm;
+		this.gemeldetAm = gemeldetAm;
 		this.geschaetzteGroesse = geschaetzteGroesse;
 	}
 	
@@ -62,19 +60,19 @@ public class Geisternetz {
 		return this.lon;
 	}
 	
-	public void setLokalisiertAm(Date lokalisiertAm) {
-		this.lokalisiertAm = lokalisiertAm;
+	public void setGemeldetAm(LocalDateTime gemeldetAm) {
+		this.gemeldetAm = gemeldetAm;
 	}
 
-	public Date getLokalisiertAm() {
-		return lokalisiertAm;
+	public LocalDateTime getGemeldetAm() {
+		return gemeldetAm;
 	}
 	
-	public void setGeschaetzteGroesse(int geschaetzteGroesse) {
+	public void setGeschaetzteGroesse(Integer geschaetzteGroesse) {
 		this.geschaetzteGroesse = geschaetzteGroesse;
 	}
 	
-	public int getGeschaetzteGroesse() {
+	public Integer getGeschaetzteGroesse() {
 		return this.geschaetzteGroesse;
 	}
 	

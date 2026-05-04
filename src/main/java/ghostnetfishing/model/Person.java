@@ -1,13 +1,15 @@
 package ghostnetfishing.model;
 
-//@Entity
+import jakarta.persistence.*;
+
+@Entity
 public class Person {
 
-	//@Id
-	//@GeneratedValue(strategy=GenerationType.AUTO)
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	private String name;
-	private int telefonnummer;
+	private String telefonnummer;
 
 	public Person() {
 
@@ -18,7 +20,7 @@ public class Person {
 		this.name = name;
 	}
 	// Konstruktor mit Name und Telefonnummer
-	public Person(String name, int telefonnummer) {
+	public Person(String name, String telefonnummer) {
 		this.name = name;
 		this.telefonnummer = telefonnummer;
 	}
@@ -35,11 +37,11 @@ public class Person {
 		this.name = name;
 	}
 	
-	public int getTelefonnummer() {
+	public String getTelefonnummer() {
 		return this.telefonnummer;
 	}
 	
-	public void setTelefonnummer(int telefonnummer) {
+	public void setTelefonnummer(String telefonnummer) {
 		this.telefonnummer = telefonnummer;
 	}
 }

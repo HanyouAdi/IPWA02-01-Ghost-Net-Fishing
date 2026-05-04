@@ -3,7 +3,7 @@ background: #3fb3fb;
 background: radial-gradient(circle,rgba(63, 179, 251, 1) 0%, rgba(70, 82, 252, 1) 100%);
   color: #ffffff;
 }
-rgb(255, 255, 255)
+
 header img,
 header svg {
   max-width: 200px;
@@ -27,3 +27,10 @@ main {
   border-radius: 10px; /* Abgerundete Ecken für ein moderneres Aussehen */
 }
 
+.ui-message-error-icon,
+.ui-messages-error-icon {
+    display: none !important; /* Versteckt die Fehlermeldungs-Icons, wei dies als Inline */
+  /*display: flex;			 /* Icon wird neben dem Text angezeigt
+    align-items: flex-start;
+    gap: 0.5rem; */
+}
