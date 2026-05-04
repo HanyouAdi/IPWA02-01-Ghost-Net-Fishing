@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Report Ghost Nets</title>
+	
+	<!-- Bootstrap CSS (CDN) -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+	<link rel="stylesheet" type="text/css" media="screen" href="styles.css" />
+</h:head>
+
+<h:body>
+<header id="top" class="container-fluid py-2">
+      <!-- div-Layout Container, damit header-Inhalt dieselben Seitlichen Abstände haben wie der Content-Bereich -->
+      <div class="container">
+        <!-- Responsive Header-Anordnung: auf kleinen Displays (<768px) untereinander, ab md nebeneinander: -->
+        <!-- row mit flex-column (vertikale Anordnung auf sm Displays), flex-md-row (Logo und Überschrift nebeneinander ab md) -->
+        <div
+          class="row flex-column flex-md-row align-items-center align-items-md-center gap-3">
+          <div class="col-12 col-md-auto text-center text-md-start">
+            <img
+              class="img-fluid header-logo"
+              src="img/Logo-NPO.PNG"
+              alt="Logo der NPO Shea Sepherd"
+            />
+          </div>
+          <div class="col-12 col-md">
+            <h1 class="text-center text-md-start">
+              Melde- und Koordinierungsplattform <br/> für Geisternetze
+            </h1>
+          </div>
+        </div>
+      </div>
+    </header>
+    
+<main class="container my-4">
+	<h:form>
+		<p:card class="mt-1" header="Willkommen auf der Report Ghost Nets Plattform!">
+			 <h5 class="mt-0">Aktion wählen:</h5>
+        <p:selectOneButton value="#{indexController.ausgewaehlteAktion}">
+            <f:selectItem itemLabel="Geisternetz melden" itemValue="melden"/>
+            <f:selectItem itemLabel="Bergung übernehmen" itemValue="bergung"/>
+            <f:selectItem itemLabel="Geisternetz als geborgen melden" itemValue="geborgen"/>
+            <f:selectItem itemLabel="Geisternetz als verschollen melden" itemValue="verschollen"/>
+        	<p:ajax process="@this" update="aktionStartenButton"/>
+        </p:selectOneButton>
+        
+        <p:commandButton id="aktionStartenButton"
+        				 value="Aktion starten" 
+        				 icon="pi pi-arrow-up-right"
+        				 action="#{indexController.weiterleiten}" 
+        				 disabled="#{indexController.keineAktionAusgewaehlt}"/>
+     
+		</p:card>
+	</h:form>
+	
+	<section id="section1">
+            <h2 class="mt-1">
+              Das Ziel von Shea Sepherd Non-Profit Organisation
+            </h2>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat
+              assumenda vero porro quaerat nisi laborum quam cumque molestias
+              ipsum distinctio consectetur nobis, dolor cupiditate expedita odio
+              quidem, soluta eligendi consequuntur et perferendis ipsam minima
+              temporibus aperiam qui. Autem architecto ex libero, dolores
+              numquam provident obcaecati error cum officia rem dignissimos in
+              id ipsam quia nisi rerum veniam perspiciatis quas placeat. Sunt ea
+              aspernatur accusamus beatae, doloremque quibusdam perspiciatis
+              repellat. Blanditiis aspernatur illum vero, asperiores
+              voluptatibus neque consectetur eveniet reiciendis explicabo
+              pariatur rem, repellat quibusdam officia. Quas, quibusdam. Ut nisi
+              asperiores adipisci, facilis tempora alias quisquam officiis
+              voluptas vitae quaerat eaque id quo suscipit? Eius nemo, possimus
+              perspiciatis animi repudiandae id sed ipsa voluptatibus saepe
+              repellat corrupti, commodi architecto dolore eveniet harum fugiat
+              nulla velit. Rerum aliquid iusto, consequuntur nisi eum dolorum
+              sequi a ratione dignissimos. Temporibus itaque, doloribus
+              doloremque esse corrupti qui consectetur enim eaque nobis sapiente
+              obcaecati nulla? Nesciunt, esse eveniet provident, libero fugiat
+              consequuntur delectus obcaecati sunt reiciendis soluta natus ipsa
+              quisquam minima aut numquam tempore temporibus non veritatis.
+              Ullam alias tenetur dolorum, et error temporibus reprehenderit
+              esse explicabo suscipit molestiae nostrum accusantium! Illum
+              maxime dolore quo magnam dignissimos provident repudiandae
+              asperiores saepe et incidunt, animi tenetur earum commodi, quod
+              expedita sequi necessitatibus beatae nisi aliquam voluptate nam
+              nulla. Eum, obcaecati beatae nemo veniam pariatur illo dolorum
+              itaque minima fugiat, similique quod repudiandae ab perspiciatis,
+              aspernatur in laborum consequuntur. Deserunt architecto modi!
+            </p>
+          </section>
+</main>
+</h:body>
+</html>

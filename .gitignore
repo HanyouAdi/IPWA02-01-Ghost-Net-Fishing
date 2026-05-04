@@ -1,0 +1,22 @@
+# Maven Build-Ausgabe
+target/
+
+# Java/Eclipse Build-Ausgabe
+bin/
+
+# Eclipse Workspace-Metadaten
+.metadata/
+
+# Logs
+*.log
+
+# Temporäre Dateien
+*.tmp
+*.bak
+
+# Betriebssystem-Dateien
+.DS_Store
+Thumbs.db
+
+# Lokale Umgebungsdateien / Passwörter
+.env

@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:p="http://primefaces.org/ui">
+	  
+<h:head>
+	<title>Report Ghost Net</title>
+	
+	<!-- Bootstrap CSS (CDN) -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous" />
+      
+	<link rel="stylesheet" type="text/css" media="screen" href="styles.css" />
+</h:head>
+
+<h:body>
+
+<header id="top" class="container-fluid py-2">
+      <!-- div-Layout Container, damit header-Inhalt dieselben Seitlichen Abstände haben wie der Content-Bereich -->
+      <div class="container">
+        <!-- Responsive Header-Anordnung: auf kleinen Displays (<768px) untereinander, ab md nebeneinander: -->
+        <!-- row mit flex-column (vertikale Anordnung auf sm Displays), flex-md-row (Logo und Überschrift nebeneinander ab md) -->
+        <div
+          class="row flex-column flex-md-row align-items-center align-items-md-center gap-3">
+          <div class="col-12 col-md-auto text-center text-md-start">
+            <img
+              class="img-fluid header-logo"
+              src="img/Logo-NPO.PNG"
+              alt="Logo der NPO Shea Sepherd"
+            />
+          </div>
+          <div class="col-12 col-md">
+            <h1 class="text-center text-md-start">
+              Geisternetz melden
+            </h1>
+          </div>
+        </div>
+      </div>
+    </header>
+    
+    <main class="container my-4">
+	<h:form id="netzMeldenForm">
+		<p:growl id="growl" showDetail="true"/>
+		<p:messages id="globalMessages" showDetail="true" />
+		
+		<p:card class="mt-1" header="Geisternetz melden">
+
+        <p:wizard flowListener="#{geisternetzMeldenController.onFlowProcess}" 
+        		  widgetVar="netzWizard">
+        
+         <!--  Persönliche Daten (optional) -->		  
+		<p:tab id="personal" title="Persönliche Daten">
+                <p:focus context="@next"/>
+                <p:panel header="Persönliche Infos (optional) - Per Checkbox können Sie anonym melden.">
+                
+                <p:messages id="personalMessages" showDetail="true" />
+                
+                <h:panelGrid columns="2" columnClasses="label, value">
+                
+                <h:outputText value="Anonym melden "/>
+                    <p:selectBooleanCheckbox id="anonym" value="#{geisternetzMeldenController.anonymMelden}">            
+                    	<p:ajax update=":netzMeldenForm:personDaten" />
+                    </p:selectBooleanCheckbox>
+                    
+                <h:panelGroup id="personDaten" layout="block">
+                   <span class="ui-float-label">
+                   	<p:inputText id="name"
+                     value="#{geisternetzMeldenController.meldendePerson.name}"
+                     required="#{!geisternetzMeldenController.anonymMelden}"
+                     disabled="#{geisternetzMeldenController.anonymMelden}"
+                     placeholder=" " />
+                    <p:outputLabel for="name" value="Name:" />
+        			
+                   </span>
+
+        			<p:outputLabel for="telefonnummer" value="Telefonnummer:" />
+        			<p:inputText id="telefonnummer"
+                     value="#{geisternetzMeldenController.meldendePerson.telefonnummer}"
+                     required="#{!geisternetzMeldenController.anonymMelden}"
+                     disabled="#{geisternetzMeldenController.anonymMelden}" />
+                    
+                  	</h:panelGroup> 
+                </h:panelGrid>  	 
+                </p:panel>
+		</p:tab>
+		
+		<!-- Schritt 2: Geisternetzdaten -->
+		<p:tab id="geisternetzDetails" title="Details zum Geisternetz">
+			<p:panel header="Geisternetz Details">
+			<p:messages id="netzMessages" showDetail="true" />
+			
+			<h:panelGrid columns="2" columnClasses="label, value">
+				
+				<p:outputLabel for="lat" value="Breitengrad" />
+				<p:inputNumber id="lat"
+							   value="#{geisternetzMeldenController.geisternetz.lat}"
+							   decimalPlaces="6"
+							   minValue="-90"
+							   maxValue="90"
+							   required="true"
+							   requiredMessage="Bitte geben Sie den Breitengrad ein."
+							   styleClass="w-100" />
+
+				<p:outputLabel for="lon" value="Längengrad" />
+				<p:inputNumber id="lon"
+							   value="#{geisternetzMeldenController.geisternetz.lon}"
+							   decimalPlaces="6"
+							   minValue="-180"
+							   maxValue="180"
+							   required="true"
+							   requiredMessage="Bitte geben Sie den Längengrad ein."
+							   styleClass="w-100" />
+
+				<p:outputLabel for="groesse" value="Geschätzte Größe in m²" />
+				<p:inputNumber id="groesse"
+							   value="#{geisternetzMeldenController.geisternetz.geschaetzteGroesse}"
+							   decimalPlaces="0"
+							   minValue="1"
+							   required="true"
+							   requiredMessage="Bitte geben Sie die geschätzte Größe ein."
+							   styleClass="w-100" />
+
+			</h:panelGrid>
+			</p:panel>
+		</p:tab>
+
+		<!-- Schritt 3: Zusammenfassung -->
+		<p:tab id="zusammenfassung" title="Zusammenfassung">
+			<p:panel header="Zusammenfassung der Meldung">
+            <h:panelGrid columns="2" columnClasses="fw-bold, value" styleClass="mb-4">
+
+                            <h:outputText value="Anonyme Meldung:" />
+                            <h:outputText value="#{geisternetzMeldenController.anonymMelden ? 'Ja' : 'Nein'}" />
+
+                            <h:outputText value="Name:" />
+                            <h:outputText value="#{geisternetzMeldenController.anonymMelden ? '-' : geisternetzMeldenController.meldendePerson.name}" />
+
+                            <h:outputText value="Telefonnummer:" />
+                            <h:outputText value="#{geisternetzMeldenController.anonymMelden ? '-' : geisternetzMeldenController.meldendePerson.telefonnummer}" />
+
+                            <h:outputText value="Breitengrad:" />
+                            <h:outputText value="#{geisternetzMeldenController.geisternetz.lat}" />
+
+                            <h:outputText value="Längengrad:" />
+                            <h:outputText value="#{geisternetzMeldenController.geisternetz.lon}" />
+
+                            <h:outputText value="Geschätzte Größe:" />
+                            <h:outputText value="#{geisternetzMeldenController.geisternetz.geschaetzteGroesse} m²" />
+
+                        </h:panelGrid>
+
+			<p:commandButton value="Geisternetz speichern"
+            				 icon="pi pi-save"
+            				 action="#{geisternetzMeldenController.speichern}"
+            				 update="growl"
+            				 process="@form" /> <!-- Alle Eingaben speicher und verarbeiten. -->
+            				 
+			<p:button value="Zurück zur Startseite"
+            		  icon="pi pi-home"
+                      outcome="index"
+                      styleClass="ms-2" />
+                </p:panel>
+            </p:tab>
+        </p:wizard>
+	</p:card>
+	</h:form>
+	</main>
+	</h:body>
+</html>
+    

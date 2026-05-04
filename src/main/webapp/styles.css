@@ -1,0 +1,29 @@
+header {
+background: #3fb3fb;
+background: radial-gradient(circle,rgba(63, 179, 251, 1) 0%, rgba(70, 82, 252, 1) 100%);
+  color: #ffffff;
+}
+rgb(255, 255, 255)
+header img,
+header svg {
+  max-width: 200px;
+  max-height: 200px;
+  height: auto;
+  width: auto;
+}
+
+.header-logo {
+  max-width: 180px; /* Maximale Breite für das Header-Logo */
+}
+
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: #333;
+    background-color: ffffff;
+}
+
+main {
+  border: 3px solid #3fb3fb !important; /* Blattgrüner Rand (aus Ihrem Header-Grün) */
+  border-radius: 10px; /* Abgerundete Ecken für ein moderneres Aussehen */
+}
+
