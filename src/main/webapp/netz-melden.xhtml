@@ -6,16 +6,10 @@
 	  
 <h:head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<title>Report Ghost Net</title>
+	<title>Netz melden</title>
 	
-	<!-- Bootstrap CSS (CDN) -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
-      crossorigin="anonymous" />
-      
-	<link rel="stylesheet" type="text/css" media="screen" href="styles.css" />
+	<h:outputStylesheet library="bootstrap" name="css/bootstrap.min.css" />
+	<h:outputStylesheet library="css" name="styles.css"  />
 </h:head>
 
 <h:body>
@@ -25,14 +19,14 @@
       <div class="container">
         <!-- Responsive Header-Anordnung: auf kleinen Displays (<768px) untereinander, ab md nebeneinander: -->
         <!-- row mit flex-column (vertikale Anordnung auf sm Displays), flex-md-row (Logo und Überschrift nebeneinander ab md) -->
-        <div
-          class="row flex-column flex-md-row align-items-center align-items-md-center gap-3">
+        <div class="row flex-column flex-md-row align-items-center align-items-md-center gap-3">
           <div class="col-12 col-md-auto text-center text-md-start">
-            <img
-              class="img-fluid header-logo"
-              src="img/Logo-NPO.PNG"
-              alt="Logo der NPO Shea Sepherd"
-            />
+            <h:link outcome="index" title="Zur Startseite">
+          <h:graphicImage library="img"
+                name="logo-npo.png"
+                alt="Logo der NPO"
+                styleClass="img-fluid header-logo" />
+           </h:link>
           </div>
           <div class="col-12 col-md">
             <h1 class="text-center text-md-start">
@@ -55,16 +49,12 @@
          <!--  Persönliche Daten (optional) -->		  
 		<p:tab id="personal" title="Persönliche Daten">
                 <p:focus context="@next"/>
-                <p:panel header="Persönliche Daten sind optional.">
+                <p:panel header="Persönliche Daten sind optional. Bitte geben sie die Telefonnummer im internationalen Format an (z.B. +49 123 4567890)." styleClass="mb-4">
                 
-                <p:messages id="personalMessages" showDetail="false" closable="true"/> <!-- Spezifische Fehlermeldungen für diesen Schritt -->
+                <p:messages id="personalMessages" showSummary="true" showDetail="true" closable="true"/> <!-- Spezifische Fehlermeldungen für diesen Schritt -->
                 	
-                	<div class="row g-3 align-items-end">
-
-    <h:panelGroup id="personDaten" layout="block" styleClass="col-12 col-md-10">
-        <div class="row g-3">
-
-            <div class="col-12 col-md-6">
+        <div class="row g-3 align-items-end">
+        <div class="col-12 col-md-5">
                 <span class="ui-float-label w-100">
                     <p:inputText id="name"
                                  value="#{geisternetzMeldenController.meldendePerson.name}"
@@ -77,41 +67,39 @@
                 </span>
             </div>
 
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-5">
                 <span class="ui-float-label w-100">
                     <p:inputText id="telefonnummer"
                                  value="#{geisternetzMeldenController.meldendePerson.telefonnummer}"
                                  required="#{!geisternetzMeldenController.anonymMelden}"
                                  disabled="#{geisternetzMeldenController.anonymMelden}"
                                  placeholder=" "
-                                 requiredMessage="Bitte geben Sie eine Telefonnummer ein."
+                                 validator="#{geisternetzMeldenController.validateTelefonnummer}"
+                                 maxlength="25"
+                                 requiredMessage="Bitte geben Sie eine internationale Telefonnummer ein."
                                  styleClass="w-100" />
                     <p:outputLabel for="telefonnummer" value="Telefonnummer" />
                 </span>
             </div>
 
-        </div>
-    </h:panelGroup>
-
-    <div class="col-12 col-md-2">
-        <h5 class="mt-0 mb-2">Anonym</h5>
-
-        <p:toggleSwitch id="anonymSwitch"
-                        value="#{geisternetzMeldenController.anonymMelden}">
-            <p:ajax process="@this" update="personDaten" />
-        </p:toggleSwitch>
-    </div>
-
-</div>   	 
-          </p:panel>
+    	<div class="col-12 col-md-2">
+	        <h5 class="mt-0 mb-2">Anonym</h5>
+	        <p:toggleSwitch id="anonymSwitch"
+	                        value="#{geisternetzMeldenController.anonymMelden}">
+	            <p:ajax process="@this" update=":netzMeldenForm:name :netzMeldenForm:telefonnummer" />
+	        </p:toggleSwitch>
+    	</div>
+		</div>   	 
+        </p:panel>
 		</p:tab>
 		
 		<!-- Schritt 2: Geisternetzdaten -->
 		<p:tab id="geisternetzDetails" title="Geisternetz Details">
 			<p:panel header="Details zum Geisternetz: Angaben bitte in GPX-Format (Dezimalgrad).">
 			<p:messages id="netzMessage"
-					    styleClass="mt-3 w-100"
-					    closable="true" />
+			            showDetail="false"
+			            styleClass="mt-3 w-100"
+			            closable="true" /> <!-- Spezifische Fehlermeldungen für diesen Schritt -->
 			
 			<h:panelGrid columns="2" columnClasses="label, value">
 				
@@ -183,7 +171,7 @@
 			<p:commandButton value="Geisternetz speichern"
             				 icon="pi pi-save"
             				 action="#{geisternetzMeldenController.speichern}"
-            				 update="growl globalMessages" 
+            				 update="growl" 
             				 process="@form" /> <!-- Alle Eingaben speicher und verarbeiten. -->
             				 
 			<p:button value="Zurück zur Startseite"

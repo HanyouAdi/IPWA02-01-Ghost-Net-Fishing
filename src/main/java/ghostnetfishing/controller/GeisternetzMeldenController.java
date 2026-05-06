@@ -10,7 +10,9 @@ import ghostnetfishing.model.Geisternetz;
 import ghostnetfishing.model.Person;
 import ghostnetfishing.model.Status;
 import jakarta.faces.application.FacesMessage;
+import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.validator.ValidatorException;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 
@@ -24,8 +26,7 @@ public class GeisternetzMeldenController implements Serializable {
     private Person meldendePerson;
 
     private boolean anonymMelden;
-    private String eingabe;
-    
+
     private GeisternetzDAO geisternetzDAO = new GeisternetzDAO();
 
     public GeisternetzMeldenController() {
@@ -48,10 +49,14 @@ public class GeisternetzMeldenController implements Serializable {
         if (anonymMelden) {
             geisternetz.setMeldendePerson(null);
         } else {
+            meldendePerson.setTelefonnummer(
+                    bereinigeTelefonnummer(meldendePerson.getTelefonnummer())
+            );
+
             geisternetz.setMeldendePerson(meldendePerson);
         }
-        
-        geisternetzDAO.speichern(geisternetz); // Geisternetz wird in der Datenbank gespeichert
+
+        geisternetzDAO.speichern(geisternetz);
 
         FacesContext.getCurrentInstance().addMessage(
                 null,
@@ -62,14 +67,56 @@ public class GeisternetzMeldenController implements Serializable {
                 )
         );
 
-        geisternetz = new Geisternetz(); // Neues Geisternetz-Objekt wird erstellt, um die Eingabefelder zu leeren
-        meldendePerson = new Person(); // Neues Person-Objekt wird erstellt, um die Eingabefelder zu leeren
-        anonymMelden = false; // Anonyme Meldung zurücksetzen
+        geisternetz = new Geisternetz();
+        meldendePerson = new Person();
+        anonymMelden = false;
 
-        geisternetz.setStatus(Status.GEMELDET); // Status wird auf "GEMELDET" gesetzt
-        geisternetz.setGemeldetAm(LocalDateTime.now()); // Meldungszeitpunkt wird auf die aktuelle Zeit gesetzt
-        
-        return null; // Bleibt auf der aktuellen Seite, damit der Benutzer weitere Geisternetze melden kann
+        geisternetz.setStatus(Status.GEMELDET);
+        geisternetz.setGemeldetAm(LocalDateTime.now());
+
+        return null;
+    }
+
+    public void validateTelefonnummer(FacesContext context, UIComponent component, Object value)
+            throws ValidatorException {
+
+        if (anonymMelden) {
+            return;
+        }
+
+        if (value == null || value.toString().trim().isEmpty()) {
+            throw new ValidatorException(
+                    new FacesMessage(
+                            FacesMessage.SEVERITY_ERROR,
+                            "Ungültige Telefonnummer",
+                            "Bitte geben Sie eine Telefonnummer im internationalen Format ein, z. B. +491701234567, oder wählen Sie anonyme Meldung."
+                    )
+            );
+        }
+
+        String telefonnummer = value.toString().trim();
+
+        String bereinigteTelefonnummer = telefonnummer.replaceAll("[\\s()-]", "");
+
+        String e164Pattern = "^\\+[1-9][0-9]{1,14}$";
+
+        if (!bereinigteTelefonnummer.matches(e164Pattern)) {
+            throw new ValidatorException(
+                    new FacesMessage(
+                            FacesMessage.SEVERITY_ERROR,
+                            "Ungültige Telefonnummer",
+                            "Bitte verwenden Sie ein internationales Format, z. B. +491701234567 oder +49 170 1234567."
+                    )
+            );
+        }
+    }
+
+    private String bereinigeTelefonnummer(String telefonnummer) {
+        if (telefonnummer == null) {
+            return null;
+        }
+
+        return telefonnummer.trim().replaceAll("[\\s()-]", "");
     }
 
     public Geisternetz getGeisternetz() {
@@ -94,17 +141,10 @@ public class GeisternetzMeldenController implements Serializable {
 
     public void setAnonymMelden(boolean anonymMelden) {
         this.anonymMelden = anonymMelden;
-		if (anonymMelden) { // Name auf "Anonym" setzen,
-			this.meldendePerson.setName("Anonym");
-			this.meldendePerson.setTelefonnummer(null); // Telefonnummer wird auf null gesetzt, da sie bei anonymen Meldungen nicht benötigt wird
-		}
-    }
-    
-    public String getEingabe() {
-        return eingabe;
-    }
 
-    public void setEingabe(String eingabe) {
-        this.eingabe = eingabe;
+        if (anonymMelden) {
+            this.meldendePerson.setName("Anonym");
+            this.meldendePerson.setTelefonnummer(null);
+        }
     }
 }

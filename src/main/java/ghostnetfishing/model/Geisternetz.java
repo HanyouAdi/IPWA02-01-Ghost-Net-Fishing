@@ -22,14 +22,14 @@ public class Geisternetz {
 
 	// Ein Geisternetz kann von einer Person gemeldet werden, aber eine Person kann auch mehrere Geisternetze melden. Daher N:1
     @ManyToOne(cascade = CascadeType.PERSIST) //CascadeType.PERSIST = Beim Speichern des Geisternetzes wird eine neue zugehörige Person automatisch mitgespeichert.
-    @JoinColumn(name = "meldende_person_id") 
+    @JoinColumn(name = "meldende_person_id") // Legt den Namen der Spalte in der Datenbank fest, legt FK in DB an  die die Beziehung zur meldenden Person herstellt. Ohne diese Annotation würde JPA automatisch einen Namen generieren, z.B. "meldendePerson_id", aber mit der Annotation können wir den Namen explizit festlegen.
     private Person meldendePerson;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}) // CascadeType.MERGE = Beim Aktualisieren eines Geisternetzes wird die zugehörige Person ebenfalls aktualisiert, falls sie bereits existiert. Das ist wichtig, damit Änderungen an der bergenden Person auch in der Datenbank gespeichert werden.)
     @JoinColumn(name = "bergende_person_id")
     private Person bergendePerson;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "verschollen_gemeldet_von_id")
     private Person verschollenGemeldetVon;
 	
@@ -42,6 +42,10 @@ public class Geisternetz {
 		this.lon = lon;
 		this.gemeldetAm = gemeldetAm;
 		this.geschaetzteGroesse = geschaetzteGroesse;
+	}
+	
+	public Long getId() { // Für User Story 2: Als Nutzer möchte ich die ID eines Geisternetzes abrufen können, damit ich es eindeutig identifizieren kann.
+		return id;
 	}
 	
 	public void setLat(Double lat) {
