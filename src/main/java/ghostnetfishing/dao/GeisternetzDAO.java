@@ -28,22 +28,39 @@ public class GeisternetzDAO {
 	        }
 	    }
 	 
-	  public List<Geisternetz> findeNachStatus(Status status) {
-	        EntityManager em = emf.createEntityManager();
+	 public List<Geisternetz> findeNachStatus(Status status) {
+		    EntityManager em = emf.createEntityManager();
 
-	        try {
-	            TypedQuery<Geisternetz> query = em.createQuery( // JPQL-Abfrage, um Geisternetze basierend auf ihrem Status zu finden
-	                    "SELECT g FROM Geisternetz g WHERE g.status = :status",
-	                    Geisternetz.class
-	            );
+		    try {
+		        TypedQuery<Geisternetz> query = em.createQuery(
+		                "SELECT g FROM Geisternetz g WHERE g.status = :status",
+		                Geisternetz.class
+		        );
 
-	            query.setParameter("status", status); // Setzen des Parameters für die Abfrage, um nur Geisternetze mit dem angegebenen Status zu erhalten
+		        query.setParameter("status", status);
 
-	            return query.getResultList();
-	        } finally {
-	            em.close();
-	        }
-	    }
+		        return query.getResultList();
+		    } finally {
+		        em.close();
+		    }
+		}
+
+		public List<Geisternetz> findeNachStatusListe(List<Status> statusListe) {
+		    EntityManager em = emf.createEntityManager();
+
+		    try {
+		        TypedQuery<Geisternetz> query = em.createQuery(
+		                "SELECT g FROM Geisternetz g WHERE g.status IN :statusListe",
+		                Geisternetz.class
+		        );
+
+		        query.setParameter("statusListe", statusListe);
+
+		        return query.getResultList();
+		    } finally {
+		        em.close();
+		    }
+		}
 
 	    public Geisternetz aktualisieren(Geisternetz geisternetz) {
 	        EntityManager em = emf.createEntityManager();

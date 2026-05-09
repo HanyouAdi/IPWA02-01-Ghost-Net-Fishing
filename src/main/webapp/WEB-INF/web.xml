@@ -7,7 +7,7 @@
 
     <display-name>Ghost Net Fishing</display-name>
 
-	<!-- JSF/FacesServlet verarbeitet alle .xhtml-Dateien 
+	<!-- JSF/FacesServlet verarbeitet alle .xhtml-Dateien -->
 	<servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>jakarta.faces.webapp.FacesServlet</servlet-class>
@@ -18,7 +18,6 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
--->
 <!-- index.xhtml ist nun die Startseite der Anwendung. 
 Alle Anfragen an die Wurzel der Webanwendung werden automatisch auf index.xhtml weitergeleitet.
 -->

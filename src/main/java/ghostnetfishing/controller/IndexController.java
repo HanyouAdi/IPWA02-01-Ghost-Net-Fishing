@@ -24,15 +24,15 @@ public class IndexController implements Serializable {
         }
 
         if ("bergung".equals(ausgewaehlteAktion)) {
-            return "person-erfassen?faces-redirect=true";
+            return "person-erfassen?faces-redirect=true&aktion=bergung"; // Weiterleitung zur Personenerfassung mit Angabe der Aktion "bergung" User Story 2
         }
 
         if ("geborgen".equals(ausgewaehlteAktion)) {
-            return "person-erfassen?faces-redirect=true";
+            return "person-erfassen?faces-redirect=true&aktion=geborgen";
         }
 
         if ("verschollen".equals(ausgewaehlteAktion)) {
-            return "person-erfassen?faces-redirect=true";
+            return "person-erfassen?faces-redirect=true&aktion=verschollen";
         }
 
         return null;

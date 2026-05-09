@@ -4,16 +4,11 @@ background: radial-gradient(circle,rgba(63, 179, 251, 1) 0%, rgba(70, 82, 252, 1
   color: #ffffff;
 }
 
-header img,
-header svg {
-  max-width: 200px;
-  max-height: 200px;
-  height: auto;
-  width: auto;
-}
-
-.header-logo {
-  max-width: 180px; /* Maximale Breite für das Header-Logo */
+.header-logo { 
+   	max-width: 170px; /* Maximale Breite für das Header-Logo */
+ 	max-height: 150px;
+ 	height: auto;
+ 	width: auto;
 }
 
 body {

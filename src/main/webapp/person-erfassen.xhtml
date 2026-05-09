@@ -28,10 +28,11 @@
                 styleClass="img-fluid header-logo" />
            </h:link>
           </div>
+          
           <div class="col-12 col-md">
             <h1 class="text-center text-md-start">
-              Person erfassen
-            </h1>
+    			#{personErfassenController.seitentitel}
+			</h1>
           </div>
         </div>
       </div>
@@ -39,18 +40,21 @@
     
     <main class="container my-4 p-4 bg-light rounded">
     
-    	<h:form id="bergungForm">
+    	<h:form id="personErfassenForm">
 
-        <p:growl id="growl" showDetail="true" />
+        <p:growl id="growl" showDetail="true" closable="true" />
 
-        <p:card styleClass="mb-4" header="Bergende Person erfassen">
+        <p:card header="Person erfassen">
 
             <div class="row g-3">
-
+			 <p:focus context="@next"/> <!-- Fokus auf das erste Eingabefeld dieses Schrittes setzen, wenn der Tab aktiviert wird -->
+             <p:panel header="Persönliche Daten sind Pflichtangaben. Bitte geben sie die Telefonnummer im internationalen Format an (z.B. +49 123 4567890)." styleClass="mb-4">
+              <p:messages id="personalMessages" showSummary="true" showDetail="true" closable="true"/> <!-- Spezifische Fehlermeldungen für diesen Schritt -->
+			<div class="row g-3 align-items-end mt-1">                
                 <div class="col-12 col-md-6">
                     <span class="ui-float-label w-100">
                         <p:inputText id="name"
-                                     value="#{bergungController.bergendePerson.name}"
+                                     value="#{personErfassenController.person.name}"
                                      required="true"
                                      requiredMessage="Bitte geben Sie einen Namen ein."
                                      placeholder=" "
@@ -62,72 +66,29 @@
                 <div class="col-12 col-md-6">
                     <span class="ui-float-label w-100">
                         <p:inputText id="telefonnummer"
-                                     value="#{bergungController.bergendePerson.telefonnummer}"
+                                     value="#{personErfassenController.person.telefonnummer}"
                                      required="true"
-                                     requiredMessage="Bitte geben Sie eine Telefonnummer ein."
                                      placeholder=" "
+                                     validator="#{personErfassenController.validateTelefonnummer}"
+                                 	 maxlength="25"
+                                 	 requiredMessage="Bitte geben Sie eine internationale Telefonnummer ein."
                                      styleClass="w-100" />
                         <p:outputLabel for="telefonnummer" value="Telefonnummer" />
                     </span>
                 </div>
-
-            </div>
-
-        </p:card>
-
-        <p:card header="Gemeldete Geisternetze">
-
-            <p:dataTable id="netzTabelle"
-                         value="#{bergungController.gemeldeteGeisternetze}"
-                         var="netz"
-                         selection="#{bergungController.ausgewaehlteGeisternetze}"
-                         rowKey="#{netz.id}"
-                         paginator="true"
-                         rows="10"
-                         reflow="true"
-                         emptyMessage="Es liegen aktuell keine gemeldeten Geisternetze vor.">
-
-                <p:column selectionMode="multiple"
-                          style="width:3rem; text-align:center" />
-
-                <p:column headerText="ID">
-                    <h:outputText value="#{netz.id}" />
-                </p:column>
-
-                <p:column headerText="Breitengrad">
-                    <h:outputText value="#{netz.lat}" />
-                </p:column>
-
-                <p:column headerText="Längengrad">
-                    <h:outputText value="#{netz.lon}" />
-                </p:column>
-
-                <p:column headerText="Größe">
-                    <h:outputText value="#{netz.geschaetzteGroesse} m²" />
-                </p:column>
-
-                <p:column headerText="Status">
-                    <h:outputText value="#{netz.status}" />
-                </p:column>
-
-                <p:column headerText="Gemeldet am">
-                    <h:outputText value="#{netz.gemeldetAm}" />
-                </p:column>
-
-            </p:dataTable>
-
-            <div class="mt-4 d-flex gap-2">
-
-                <p:commandButton value="Bergung übernehmen"
-                                 icon="pi pi-check"
-                                 action="#{bergungController.bergungUebernehmen}"
-                                 process="@form"
-                                 update="@form growl" />
-
-                <p:button value="Zurück zur Startseite"
-                          icon="pi pi-home"
-                          outcome="index" />
-
+               </div>
+                <p:commandButton value="Geisternetz auswählen"
+	            				 icon="pi pi-arrow-right"
+	            				 action="#{personErfassenController.weiterleitungZuNetzDetails}"
+	            				 update="growl personalMessages"
+	            				 process="@form" 
+	            				 styleClass="mt-3"/> <!-- Alle Eingaben speicher und verarbeiten. -->
+            				 
+				<p:button value="Zurück zur Startseite"
+	            		  icon="pi pi-home"
+	                      outcome="index"
+	                      styleClass="ms-2" />
+			</p:panel>
             </div>
 
         </p:card>

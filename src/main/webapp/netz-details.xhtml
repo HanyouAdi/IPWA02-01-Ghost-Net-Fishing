@@ -1,8 +1,108 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:p="http://primefaces.org/ui">
+	  
 <h:head>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>Netz Details</title> <!-- Besteht die möglichkeit diesen Variablen zu machen? Also wenn Status gmeldet angezeigt wird, dann "Gemeldete Netze", "In Bergung" "Verschollene Netze" etc.-->
+	
+	<h:outputStylesheet library="bootstrap" name="css/bootstrap.min.css" />
+	<h:outputStylesheet library="css" name="styles.css"  />
+</h:head>
+
+<h:body>
+<header id="top" class="container-fluid py-2">
+
+      <div class="container">
+        <!-- Responsive Header-Anordnung: auf kleinen Displays (<768px) untereinander, ab md nebeneinander: -->
+        <!-- row mit flex-column (vertikale Anordnung auf sm Displays), flex-md-row (Logo und Überschrift nebeneinander ab md) -->
+        <div class="row flex-column flex-md-row align-items-center align-items-md-center gap-3">
+        
+          <div class="col-12 col-md-auto text-center text-md-start">
+            <h:link outcome="index" title="Zur Startseite">
+          <h:graphicImage library="img"
+                name="logo-npo.png"
+                alt="Logo der NPO"
+                styleClass="img-fluid header-logo" />
+           </h:link>
+          </div>
+          <div class="col-12 col-md">
+            <h1 class="text-center text-md-start">
+				 #{netzDetailsController.seitentitel}
+			</h1>
+          </div>
+        </div>
+      </div>
+    </header>
+    
+    <main class="container my-4 p-4 bg-light rounded">
+    
+            <h:form id="geisternetzDetails">
+            
+            <p:growl id="growl" showDetail="true" closeable="true"/> <!-- Allgemeines Growl für alle Aktionen auf dieser Seite -->
+            
+            <p:card header="Gemeldete Geisternetze">
+
+            <p:dataTable id="netzTabelle"
+                         value="#{netzDetailsController.geisternetze}"
+                         var="netz"
+                         selection="#{netzDetailsController.ausgewaehlteGeisternetze}"
+                         rowKey="#{netz.id}"
+                         paginator="true"
+                         rows="50"
+                         reflow="true"
+                         emptyMessage="Es liegen aktuell keine gemeldeten Geisternetze vor.">
+
+                <p:column selectionMode="multiple"
+                          style="width:3rem; text-align:center" />
+
+                <p:column headerText="ID">
+                    <h:outputText value="#{netz.id}" />
+                </p:column>
+
+                <p:column headerText="Breitengrad">
+                    <h:outputText value="#{netz.lat}" />
+                </p:column>
+
+                <p:column headerText="Längengrad">
+                    <h:outputText value="#{netz.lon}" />
+                </p:column>
+
+                <p:column headerText="Größe">
+                    <h:outputText value="#{netz.geschaetzteGroesse} m²" />
+                </p:column>
+
+                <p:column headerText="Status">
+                    <h:outputText value="#{netz.status}" />
+                </p:column>
+
+                <p:column headerText="Gemeldet am">
+                    <h:outputText value="#{netz.gemeldetAm}" />
+                </p:column>
+
+            </p:dataTable>
+
+            <div class="mt-4 d-flex gap-2">
+
+                <p:commandButton value="#{netzDetailsController.buttonText}"
+                                 icon="pi pi-check"
+                                 action="#{netzDetailsController.aktionSpeichern}"
+                                 process="@form"
+                                 update="@form growl" />
+
+                <p:button value="Zurück zur Startseite"
+                          icon="pi pi-home"
+                          outcome="index" />
+
+            </div>
+
+        </p:card>
+
+    </h:form>
+    	
+    </main>
+
+</h:body>
 </html>

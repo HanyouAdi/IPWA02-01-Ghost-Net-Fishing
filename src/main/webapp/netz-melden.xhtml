@@ -28,6 +28,7 @@
                 styleClass="img-fluid header-logo" />
            </h:link>
           </div>
+          
           <div class="col-12 col-md">
             <h1 class="text-center text-md-start">
               Geisternetz melden
@@ -48,7 +49,7 @@
         
          <!--  Persönliche Daten (optional) -->		  
 		<p:tab id="personal" title="Persönliche Daten">
-                <p:focus context="@next"/>
+                <p:focus context="@next"/> <!-- Fokus auf das erste Eingabefeld dieses Schrittes setzen, wenn der Tab aktiviert wird -->
                 <p:panel header="Persönliche Daten sind optional. Bitte geben sie die Telefonnummer im internationalen Format an (z.B. +49 123 4567890)." styleClass="mb-4">
                 
                 <p:messages id="personalMessages" showSummary="true" showDetail="true" closable="true"/> <!-- Spezifische Fehlermeldungen für diesen Schritt -->
