@@ -41,46 +41,99 @@
     
             <h:form id="geisternetzDetails">
             
-            <p:growl id="growl" showDetail="true" closeable="true"/> <!-- Allgemeines Growl für alle Aktionen auf dieser Seite -->
+            <p:growl id="growl" showDetail="true" closable="true"/> <!-- Allgemeines Growl für alle Aktionen auf dieser Seite -->
             
-            <p:card header="Gemeldete Geisternetze">
+            <p:tooltip globalSelector=".table-tooltip, .tooltip-icon-small" position="top" /> <!-- Tooltip für Tabellenüberschriften -->
+            
+            <p:card header="#{netzDetailsController.tabellenTitel}">
 
             <p:dataTable id="netzTabelle"
                          value="#{netzDetailsController.geisternetze}"
                          var="netz"
                          selection="#{netzDetailsController.ausgewaehlteGeisternetze}"
                          rowKey="#{netz.id}"
-                         paginator="true"
+                         paginator="true" 
                          rows="50"
                          reflow="true"
-                         emptyMessage="Es liegen aktuell keine gemeldeten Geisternetze vor.">
+						 scrollable="true"
+						 scrollWidth="100%"
+						 size="small"
+						 stripedRows="true"
+						 showGridlines="true"
+                         emptyMessage="Es liegen aktuell keine passenden Geisternetze vor.">
+						 <!--reflow="true" = auf kleinen Display wird die Zeile zu einer Kartenansicht, für bessere Übersichtlichkeit  -->
 
                 <p:column selectionMode="multiple"
                           style="width:3rem; text-align:center" />
 
-                <p:column headerText="ID">
+                <p:column headerText="ID" style="width:6rem">
                     <h:outputText value="#{netz.id}" />
                 </p:column>
+                
+				<p:column style="width:10rem">
+				    <f:facet name="header">
+				        <h:outputText value="Standort"
+				                      styleClass="table-tooltip"
+				                      title="Standort im GPX-Format: Breitengrad, Längengrad" />
+				        <span class="pi pi-info-circle tooltip-icon-small table-tooltip"
+				              title="Standort im GPX-Format: Breitengrad, Längengrad"></span>
+				    </f:facet>
+				
+				    <h:outputText value="#{netz.lat}"/>
+				
+				    <h:outputText value=", " />
+				
+				    <h:outputText value="#{netz.lon}"/>
+				</p:column>
+                
+	<!--  
+                <p:column style="width:6rem">
+    				<f:facet name="header">
+        				<h:outputText value="Breitengrad"
+			                      	  styleClass="table-tooltip"
+			                          title="Breitengrad im Dezimalgrad-Format" />
+			                          <span class="pi pi-info-circle tooltip-icon-small" title="Breitengrad im Dezimalgrad-Format"></span>
+    				</f:facet>
 
-                <p:column headerText="Breitengrad">
-                    <h:outputText value="#{netz.lat}" />
-                </p:column>
+    				<h:outputText value="#{netz.lat}">
+        				<f:convertNumber maxFractionDigits="6" minFractionDigits="6" />
+    				</h:outputText>
+				</p:column>
 
-                <p:column headerText="Längengrad">
-                    <h:outputText value="#{netz.lon}" />
-                </p:column>
+				<p:column style="width:6rem">
+    				<f:facet name="header">
+        				<h:outputText value="Längengrad"
+                      				  styleClass="table-tooltip"
+                      				  title="Längengrad im Dezimalgrad-Format" />
+                      				  <span class="pi pi-info-circle tooltip-icon-small" title="Längengrad im Dezimalgrad-Format"></span>
+    				</f:facet>
 
-                <p:column headerText="Größe">
-                    <h:outputText value="#{netz.geschaetzteGroesse} m²" />
-                </p:column>
+    				<h:outputText value="#{netz.lon}">
+        				<f:convertNumber maxFractionDigits="6" minFractionDigits="6" />
+    				</h:outputText>
+				</p:column>
+	-->
+				<p:column style="width:10rem">
+    				<f:facet name="header">
+            				<h:outputText value="gesch. Größe"
+            							  styleClass="table-tooltip"
+                      				   	  title="Geschätzte Größe des Geisternetzes in Quadratmetern" />
+            				<span class="pi pi-info-circle tooltip-icon-small" title="Geschätzte Größe des Geisternetzes in Quadratmetern"></span>
+    				</f:facet>
 
-                <p:column headerText="Status">
-                    <h:outputText value="#{netz.status}" />
-                </p:column>
-
-                <p:column headerText="Gemeldet am">
-                    <h:outputText value="#{netz.gemeldetAm}" />
-                </p:column>
+    				<h:outputText value="#{netz.geschaetzteGroesse} m²" />
+				</p:column>
+				
+				
+				<p:column headerText="Status" style="width:10rem">
+				                    <h:outputText value="#{netz.status.bezeichnung}" />
+				                </p:column>
+				
+				                <p:column headerText="Gemeldet am" style="width:10rem">
+				                    <h:outputText value="#{netz.gemeldetAm}">
+				    					<f:convertDateTime type="localDateTime" pattern="yyyy.MM.dd HH:mm" />
+									</h:outputText>
+				                </p:column>
 
             </p:dataTable>
 

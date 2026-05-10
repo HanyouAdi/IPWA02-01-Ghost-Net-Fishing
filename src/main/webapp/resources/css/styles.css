@@ -29,3 +29,34 @@ main {
     align-items: flex-start;
     gap: 0.5rem; */
 }
+
+/*.tooltip-icon-small {
+    font-size: 0.05rem !important; /* Sehr kleines Icon für Tooltips */
+  /*  opacity: 0.5 !important; /* Leicht transparent für ein dezentes Aussehen */
+   /* vertical-align: text-top !important; /* Vertikal zentriert zum Text, super, text-top */
+
+
+.tooltip-icon-small {
+    display: inline-block;
+    font-size: 0.6em;
+    color: #007bff;
+    cursor: help;
+    vertical-align: super;
+    opacity: 0.5;
+}
+
+/* Weniger Abstand in PrimeFaces DataTable */
+.ui-datatable .ui-datatable-data > tr > td,
+.ui-datatable .ui-datatable-thead > tr > th {
+    padding: 0.2rem 0.4rem;
+}
+
+/* Hover-Effekt für DataTable-Zeilen */
+.ui-datatable .ui-datatable-data > tr:hover {
+    background-color: #3fb3fb !important;
+}
+
+/* Alternierende Hintergrundfarbe für DataTable-Zeilen */
+.ui-datatable .ui-datatable-data > tr:nth-child(even) {
+    background-color: #bad3fe;
+}

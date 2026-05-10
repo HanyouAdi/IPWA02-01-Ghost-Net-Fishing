@@ -2,7 +2,7 @@ package ghostnetfishing.model;
 
 public enum Status {
 	GEMELDET("Gemeldet"),
-	IN_BERGUNG("In Bergung"), // Bergung bevorstehend
+	BERGUNG_BEVORSTEHEND("Bergung bevorstehend"),
     GEBORGEN("Geborgen"),
     VERSCHOLLEN("Verschollen");
 	

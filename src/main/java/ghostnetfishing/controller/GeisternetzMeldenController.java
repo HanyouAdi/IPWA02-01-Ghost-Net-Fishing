@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import org.primefaces.event.FlowEvent;
 
 import ghostnetfishing.dao.GeisternetzDAO;
+import ghostnetfishing.dao.PersonDAO;
 import ghostnetfishing.model.Geisternetz;
 import ghostnetfishing.model.Person;
 import ghostnetfishing.model.Status;
@@ -28,6 +29,7 @@ public class GeisternetzMeldenController implements Serializable {
     private boolean anonymMelden;
 
     private GeisternetzDAO geisternetzDAO = new GeisternetzDAO();
+    private PersonDAO personDAO = new PersonDAO();
 
     public GeisternetzMeldenController() {
         geisternetz = new Geisternetz();
@@ -45,6 +47,28 @@ public class GeisternetzMeldenController implements Serializable {
 
         geisternetz.setStatus(Status.GEMELDET);
         geisternetz.setGemeldetAm(LocalDateTime.now());
+        
+        Geisternetz vorhandenesGeisternetz =
+                geisternetzDAO.findeAktivesGeisternetzNachKoordinaten(
+                        geisternetz.getLat(),
+                        geisternetz.getLon()
+                );
+        
+        if (vorhandenesGeisternetz != null) {
+            FacesContext.getCurrentInstance().addMessage(
+                    null,
+                    new FacesMessage(
+                            FacesMessage.SEVERITY_WARN,
+                            "Geisternetz bereits gemeldet",
+                            "An diesen Koordinaten existiert bereits ein aktives Geisternetz mit der ID "
+                                    + vorhandenesGeisternetz.getId()
+                                    + ". Die Meldung wurde nicht erneut gespeichert."
+                    )
+            );
+
+            return null;
+        }
+
 
         if (anonymMelden) {
             geisternetz.setMeldendePerson(null);
@@ -52,8 +76,11 @@ public class GeisternetzMeldenController implements Serializable {
             meldendePerson.setTelefonnummer(
                     bereinigeTelefonnummer(meldendePerson.getTelefonnummer())
             );
+            
+            Person vorhandeneOderNeuePerson = personDAO.findeOderSpeichere(meldendePerson);
+            geisternetz.setMeldendePerson(vorhandeneOderNeuePerson);
 
-            geisternetz.setMeldendePerson(meldendePerson);
+            // geisternetz.setMeldendePerson(meldendePerson); Methode vor Änderung, das vorhandene User geändert, anstatt immer eine Person erstellt wird
         }
 
         geisternetzDAO.speichern(geisternetz);

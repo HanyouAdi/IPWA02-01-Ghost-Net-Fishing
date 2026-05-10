@@ -61,6 +61,29 @@ public class GeisternetzDAO {
 		        em.close();
 		    }
 		}
+		
+		public List<Geisternetz> findeNachStatusUndBergendePersonTelefonnummer( // Methode zum Finden von Geisternetzen basierend auf ihrem Status und der Telefonnummer der bergenden Person, siehe User Story 3: Als Nutzer möchte ich die Bergung eines Geisternetzes übernehmen können, damit ich mich um die Bergung kümmern kann.
+		        Status status,
+		        String telefonnummer
+		) {
+		    EntityManager em = emf.createEntityManager();						//Nur GN werden geladen, die den angegebenen Status "BERGUNG_BEVORSTEHEND" haben und deren bergende Person die angegebene Telefonnummer beistzt.
+
+		    try {
+		        TypedQuery<Geisternetz> query = em.createQuery(
+		                "SELECT g FROM Geisternetz g " +
+		                "WHERE g.status = :status " +
+		                "AND g.bergendePerson.telefonnummer = :telefonnummer",
+		                Geisternetz.class
+		        );
+
+		        query.setParameter("status", status);
+		        query.setParameter("telefonnummer", telefonnummer);
+
+		        return query.getResultList();
+		    } finally {
+		        em.close();
+		    }
+		}
 
 	    public Geisternetz aktualisieren(Geisternetz geisternetz) {
 	        EntityManager em = emf.createEntityManager();
@@ -76,6 +99,42 @@ public class GeisternetzDAO {
 	                em.getTransaction().rollback();
 	            }
 	            throw e;
+	        } finally {
+	            em.close();
+	        }
+	    }
+	    
+// Methode zum Finden eines aktiven Geisternetzes basierend auf seinen Koordinaten, siehe User Story 4: 
+// Als Nutzer möchte ich ein aktives Geisternetz anhand seiner Koordinaten finden können, damit ich es leichter lokalisieren kann.
+	    public Geisternetz findeAktivesGeisternetzNachKoordinaten(Double lat, Double lon) {
+	        EntityManager em = emf.createEntityManager();
+
+	        try {
+	            TypedQuery<Geisternetz> query = em.createQuery(
+	                    "SELECT g FROM Geisternetz g " +
+	                    "WHERE g.lat = :lat " +
+	                    "AND g.lon = :lon " +
+	                    "AND g.status IN :statusListe",
+	                    Geisternetz.class
+	            );
+
+	            query.setParameter("lat", lat);
+	            query.setParameter("lon", lon);
+	            query.setParameter(
+	                    "statusListe",
+	                    List.of(Status.GEMELDET, Status.BERGUNG_BEVORSTEHEND)
+	            );
+
+	            query.setMaxResults(1);
+
+	            List<Geisternetz> treffer = query.getResultList();
+
+	            if (treffer.isEmpty()) {
+	                return null;
+	            }
+
+	            return treffer.get(0);
+
 	        } finally {
 	            em.close();
 	        }

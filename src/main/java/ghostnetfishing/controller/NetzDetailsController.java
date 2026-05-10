@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import ghostnetfishing.dao.GeisternetzDAO;
+import ghostnetfishing.dao.PersonDAO;
 import ghostnetfishing.model.Geisternetz;
 import ghostnetfishing.model.Person;
 import ghostnetfishing.model.Status;
@@ -21,6 +22,7 @@ public class NetzDetailsController implements Serializable { //zu NetzDetailsCon
     private static final long serialVersionUID = 1L;
 
     private GeisternetzDAO geisternetzDAO = new GeisternetzDAO();
+    private PersonDAO personDAO = new PersonDAO();
 
     private Person person;
     private String aktion;
@@ -59,14 +61,19 @@ public class NetzDetailsController implements Serializable { //zu NetzDetailsCon
             return;
         }
 
-        if ("geborgen".equals(aktion)) {
-            geisternetze = geisternetzDAO.findeNachStatus(Status.IN_BERGUNG);
+        if ("geborgen".equals(aktion)) { // Wenn die Aktion "geborgen" ist, werden Geisternetze mit dem Status "Bergung bevorstehend" geladen, die der bergenden Person zugeordnet sind, siehe User Story 3: Als Nutzer möchte ich die Bergung eines Geisternetzes übernehmen können, damit ich mich um die Bergung kümmern kann.
+            String telefonnummer = bereinigeTelefonnummer(person.getTelefonnummer());
+
+            geisternetze = geisternetzDAO.findeNachStatusUndBergendePersonTelefonnummer(
+                    Status.BERGUNG_BEVORSTEHEND,
+                    telefonnummer
+            );
             return;
         }
 
         if ("verschollen".equals(aktion)) {
             geisternetze = geisternetzDAO.findeNachStatusListe(
-                    Arrays.asList(Status.GEMELDET, Status.IN_BERGUNG)
+                    Arrays.asList(Status.GEMELDET, Status.BERGUNG_BEVORSTEHEND)
             );
             return;
         }
@@ -86,11 +93,17 @@ public class NetzDetailsController implements Serializable { //zu NetzDetailsCon
             );
             return;
         }
+        
+        Person vorhandeneOderNeuePerson = null;
+        
+        if ("bergung".equals(aktion) || "verschollen".equals(aktion)) {
+            vorhandeneOderNeuePerson = personDAO.findeOderSpeichere(person);
+        }
 
         for (Geisternetz netz : ausgewaehlteGeisternetze) {
             if ("bergung".equals(aktion)) {
-                netz.setBergendePerson(person);
-                netz.setStatus(Status.IN_BERGUNG);
+                netz.setBergendePerson(vorhandeneOderNeuePerson);
+                netz.setStatus(Status.BERGUNG_BEVORSTEHEND);
             }
 
             if ("geborgen".equals(aktion)) {
@@ -98,7 +111,7 @@ public class NetzDetailsController implements Serializable { //zu NetzDetailsCon
             }
 
             if ("verschollen".equals(aktion)) {
-                netz.setVerschollenGemeldetVon(person);
+                netz.setVerschollenGemeldetVon(vorhandeneOderNeuePerson);
                 netz.setStatus(Status.VERSCHOLLEN);
             }
 
@@ -116,6 +129,14 @@ public class NetzDetailsController implements Serializable { //zu NetzDetailsCon
 
         ladeGeisternetze();
         ausgewaehlteGeisternetze = null;
+    }
+    
+    private String bereinigeTelefonnummer(String telefonnummer) { // Methode zur Bereinigung der Telefonnummer, um sicherzustellen, dass sie in einem einheitlichen Format gespeichert wird, z. B. durch Entfernen von Leerzeichen, Bindestrichen oder Klammern, damit die Telefonnummern in der Datenbank konsistent sind und leichter verglichen werden können.
+        if (telefonnummer == null) {
+            return null;
+        }
+
+        return telefonnummer.trim().replaceAll("[\\s()-]", "");
     }
 
     public String getSeitentitel() {
@@ -140,11 +161,11 @@ public class NetzDetailsController implements Serializable { //zu NetzDetailsCon
         }
 
         if ("geborgen".equals(aktion)) {
-            return "Geisternetze in Bergung";
+            return "Geisternetze mit bevorstehender Bergung";
         }
 
         if ("verschollen".equals(aktion)) {
-            return "Gemeldete oder in Bergung befindliche Geisternetze";
+            return "Gemeldete oder Bergung bevorstehende Geisternetze";
         }
 
         return "Geisternetze";

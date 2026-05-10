@@ -9,6 +9,7 @@ public class Person {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	private String name;
+	@Column(unique=true) // Telefonummer soll eindeutig sein, damit Personen nicht mehrfach angelegt werden können
 	private String telefonnummer;
 
 	public Person() {
