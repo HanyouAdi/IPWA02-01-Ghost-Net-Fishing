@@ -9,7 +9,7 @@
 	<title>Person erfassen</title>
 	
 	 <link rel="icon"
-          type="image/x-icon"
+           type="image/x-icon"
            href="#{resource['img:favicon/favicon-npo.ico']}" />
 	
 	<h:outputStylesheet library="bootstrap" name="css/bootstrap.min.css" />
@@ -17,7 +17,7 @@
 </h:head>
 
 <h:body>
-<header id="top" class="container-fluid py-2">
+<header class="container-fluid py-2">
       <!-- div-Layout Container, damit header-Inhalt dieselben Seitlichen Abstände haben wie der Content-Bereich -->
       <div class="container">
         <!-- Responsive Header-Anordnung: auf kleinen Displays (<768px) untereinander, ab md nebeneinander: -->
@@ -26,10 +26,10 @@
         
           <div class="col-12 col-md-auto text-center text-md-start">
             <h:link outcome="index" title="Zur Startseite">
-          <h:graphicImage library="img"
-                name="logo-npo.png"
-                alt="Logo der NPO"
-                styleClass="img-fluid header-logo" />
+	          <h:graphicImage library="img"
+			                  name="logo-npo.png"
+			                  alt="Logo der NPO"
+			                  styleClass="img-fluid header-logo" />
            </h:link>
           </div>
           
@@ -42,63 +42,85 @@
       </div>
     </header>
     
-    <main class="container my-4 p-4 bg-light rounded">
-    
-    	<h:form id="personErfassenForm">
+    <main class="container my-4">
+    <section class="row justify-content-center">
+        <div class="col-12">
 
-        <p:growl id="growl" showDetail="true" closable="true" />
+            <h:form id="personErfassenForm">
 
-        <p:card header="Person erfassen">
+                <p:growl id="growl" showDetail="true" closable="true" />
 
-            <div class="row g-3">
-			 <p:focus context="@next"/> <!-- Fokus auf das erste Eingabefeld dieses Schrittes setzen, wenn der Tab aktiviert wird -->
-             <p:panel header="Persönliche Daten sind Pflichtangaben. Bitte geben sie die Telefonnummer im internationalen Format an (z.B. +49 123 4567890)." styleClass="mb-4">
-              <p:messages id="personalMessages" showSummary="true" showDetail="true" closable="true"/> <!-- Spezifische Fehlermeldungen für diesen Schritt -->
-			<div class="row g-3 align-items-end mt-1">                
-                <div class="col-12 col-md-6">
-                    <span class="ui-float-label w-100">
-                        <p:inputText id="name"
-                                     value="#{personErfassenController.person.name}"
-                                     required="true"
-                                     requiredMessage="Bitte geben Sie einen Namen ein."
-                                     placeholder=" "
-                                     styleClass="w-100" />
-                        <p:outputLabel for="name" value="Name" />
-                    </span>
-                </div>
+                <p:card styleClass="bg-light shadow-lg rounded-4">
 
-                <div class="col-12 col-md-6">
-                    <span class="ui-float-label w-100">
-                        <p:inputText id="telefonnummer"
-                                     value="#{personErfassenController.person.telefonnummer}"
-                                     required="true"
-                                     placeholder=" "
-                                     validator="#{personErfassenController.validateTelefonnummer}"
-                                 	 maxlength="25"
-                                 	 requiredMessage="Bitte geben Sie eine internationale Telefonnummer ein."
-                                     styleClass="w-100" />
-                        <p:outputLabel for="telefonnummer" value="Telefonnummer" />
-                    </span>
-                </div>
-               </div>
-                <p:commandButton value="Geisternetz auswählen"
-	            				 icon="pi pi-arrow-right"
-	            				 action="#{personErfassenController.weiterleitungZuNetzDetails}"
-	            				 update="growl personalMessages"
-	            				 process="@form" 
-	            				 styleClass="mt-3"/> <!-- Alle Eingaben speicher und verarbeiten. -->
-            				 
-				<p:button value="Zurück zur Startseite"
-	            		  icon="pi pi-home"
-	                      outcome="index"
-	                      styleClass="ms-2" />
-			</p:panel>
-            </div>
+                    <f:facet name="title">
+                        <h2 class="h4 mb-0">Person erfassen</h2>
+                    </f:facet>
 
-        </p:card>
+                    <p class="text-muted mb-4">
+                        Bitte erfassen Sie Ihre Kontaktdaten. Die Telefonnummer wird im internationalen Format benötigt,
+                        zum Beispiel <strong>+49 123 4567890</strong>.
+                    </p>
 
-    </h:form>
-    	
+                    <p:focus context="@next" />
+
+                    <p:messages id="personalMessages"
+                                showSummary="true"
+                                showDetail="true"
+                                closable="true"
+                                styleClass="mb-4" />
+
+                    <div class="row g-4 align-items-end">
+
+                        <div class="col-12 col-md-6">
+                            <span class="ui-float-label w-100">
+                                <p:inputText id="name"
+                                             value="#{personErfassenController.person.name}"
+                                             required="true"
+                                             requiredMessage="Bitte geben Sie einen Namen ein."
+                                             placeholder=" "
+                                             styleClass="w-100" />
+                                <p:outputLabel for="name" value="Name" />
+                            </span>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <span class="ui-float-label w-100">
+                                <p:inputText id="telefonnummer"
+                                             value="#{personErfassenController.person.telefonnummer}"
+                                             required="true"
+                                             placeholder=" "
+                                             validator="#{personErfassenController.validateTelefonnummer}"
+                                             maxlength="25"
+                                             requiredMessage="Bitte geben Sie eine internationale Telefonnummer ein."
+                                             styleClass="w-100" />
+                                <p:outputLabel for="telefonnummer" value="Telefonnummer" />
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex flex-column flex-sm-row gap-2 mt-4">
+
+                        <p:commandButton value="Geisternetz auswählen"
+                                         icon="pi pi-arrow-right"
+                                         action="#{personErfassenController.weiterleitungZuNetzDetails}"
+                                         update="growl personalMessages"
+                                         process="@form"
+                                         styleClass="w-100 w-sm-auto" />
+
+                        <p:button value="Zurück zur Startseite"
+                                  icon="pi pi-home"
+                                  outcome="index"
+                                  styleClass="w-100 w-sm-auto" />
+
+                    </div>
+
+                </p:card>
+
+            </h:form>
+
+        </div>
+    </section>
     </main>
 
 </h:body>

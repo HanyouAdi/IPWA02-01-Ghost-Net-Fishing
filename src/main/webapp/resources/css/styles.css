@@ -50,6 +50,7 @@ main {
     background-color: #f8f9fa;
     box-shadow: 0 0.35rem 1rem rgba(0, 0, 0, 0.08);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
+    will-change: transform; 
 }
 
 .info-card:hover {
@@ -76,7 +77,7 @@ main {
         width: 100%;
     }
 
-    .action-start-button {
+    .action-start-button, person-action-button {
         width: 100%;
     }
 }
