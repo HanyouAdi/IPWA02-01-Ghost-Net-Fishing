@@ -33,36 +33,135 @@
           </div>
           <div class="col-12 col-md">
             <h1 class="text-center text-md-start">
-              Melde- und Koordinierungsplattform <br/> für Geisternetze
+              Melde- und Koordinierungsplattform <br/> zur Bergung von Geisternetzen
             </h1>
           </div>
         </div>
       </div>
     </header>
     
-<main class="container my-4">
+<main class="container my-3">
+	
 	<h:form>
+		<p:card class="mt-3 bg-light shadow-lg action-card">
+			<div class="row align-items-end g-1">
+
+            <div class="col-12 col-lg-8">
+                <h2 class="mb-2">Was möchten Sie tun?</h2>
+                <p class="text-muted mb-3">
+                    Wählen Sie eine Aktion aus. Die Plattform führt Sie anschließend durch den passenden Ablauf.
+                </p>
+
+                <p:selectOneButton value="#{indexController.ausgewaehlteAktion}"
+                                   styleClass="action-select">
+                    <f:selectItem itemLabel="Geisternetz melden" itemValue="melden"/>
+                    <f:selectItem itemLabel="Bergung übernehmen" itemValue="bergung"/>
+                    <f:selectItem itemLabel="Als geborgen melden" itemValue="geborgen"/>
+                    <f:selectItem itemLabel="Als verschollen melden" itemValue="verschollen"/>
+                    <p:ajax process="@this" update="aktionStartenButton"/>
+                </p:selectOneButton>
+            </div>
+
+            <div class="col-12 col-lg-4">
+                <p:commandButton id="aktionStartenButton"
+                                 value="Aktion starten"
+                                 icon="pi pi-arrow-up-right"
+                                 action="#{indexController.weiterleiten}"
+                                 disabled="#{indexController.keineAktionAusgewaehlt}"
+                                 styleClass="ui-button-success action-start-button"/>
+            </div>
+
+        </div>
+
+    </p:card>
+</h:form>
 	
-		<p:card styleClass="mt-1" header="Willkommen auf der Report Ghost Nets Plattform!">
-			 <h5 class="mt-0">Aktion wählen:</h5>
-        <p:selectOneButton value="#{indexController.ausgewaehlteAktion}">
-            <f:selectItem itemLabel="Geisternetz melden" itemValue="melden"/>
-            <f:selectItem itemLabel="Bergung übernehmen" itemValue="bergung"/>
-            <f:selectItem itemLabel="Geisternetz als geborgen melden" itemValue="geborgen"/>
-            <f:selectItem itemLabel="Geisternetz als verschollen melden" itemValue="verschollen"/>
-        	<p:ajax process="@this" update="aktionStartenButton"/>
-        </p:selectOneButton>
-        
-        <p:commandButton id="aktionStartenButton"
-        				 value="Aktion starten" 
-        				 icon="pi pi-arrow-up-right"
-        				 action="#{indexController.weiterleiten}" 
-        				 disabled="#{indexController.keineAktionAusgewaehlt}"/>
-     
-		</p:card>
-	</h:form>
+	<section id="section1" class="my-4">
+    <div class="alert alert-info shadow-sm" role="alert">
+        <strong>Hinweis:</strong>
+        Die Auswahl bestimmt, welche Geisternetze angezeigt werden und welche Statusänderung anschließend gespeichert wird.
+    </div>
+</section>
+
+<section class="my-4">
+    <h2 class="mb-3">So funktioniert die Plattform</h2>
+
+    <div class="row g-3">
+
+        <div class="col-12 col-md-6">
+            <div class="card h-100 info-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-start gap-3">
+                        <span class="pi pi-map-marker info-icon"></span>
+                        <div>
+                            <h3 class="h5 mb-2">Geisternetz melden</h3>
+                            <p>
+                                Nutzen Sie diese Aktion, wenn Sie ein neues Geisternetz entdeckt haben.
+                                Erfasst werden Position, geschätzte Größe und optional Kontaktdaten.
+                            </p>
+                            <span class="badge text-bg-primary">Status: Gemeldet</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+            <div class="card h-100 info-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-start gap-3">
+                        <span class="pi pi-users info-icon"></span>
+                        <div>
+                            <h3 class="h5 mb-2">Bergung übernehmen</h3>
+                            <p>
+                                Nutzen Sie diese Aktion, wenn Sie die Bergung eines oder mehrerer gemeldeter Geisternetze übernehmen möchten.
+                            </p>
+                            <span class="badge text-bg-warning">Status: Bergung bevorstehend</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+            <div class="card h-100 info-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-start gap-3">
+                        <span class="pi pi-check-circle info-icon"></span>
+                        <div>
+                            <h3 class="h5 mb-2">Als geborgen melden</h3>
+                            <p>
+                                Nutzen Sie diese Aktion nach erfolgreicher Bergung.
+                                Angezeigt werden nur Geisternetze, für deren Bergung Sie eingetragen wurden.
+                            </p>
+                            <span class="badge text-bg-success">Status: Geborgen</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+            <div class="card h-100 info-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-start gap-3">
+                        <span class="pi pi-question-circle info-icon"></span>
+                        <div>
+                            <h3 class="h5 mb-2">Als verschollen melden</h3>
+                            <p>
+                                Nutzen Sie diese Aktion, wenn ein gemeldetes oder zur Bergung vorgesehenes Geisternetz nicht mehr auffindbar ist.
+                            </p>
+                            <span class="badge text-bg-secondary">Status: Verschollen</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
 	
-	<section id="section1">
+	<section id="section2">
             <h2 class="mt-1">
               Das Ziel von Shea Sepherd Non-Profit Organisation
             </h2>

@@ -8,6 +8,10 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<title>Netz melden</title>
 	
+	 <link rel="icon"
+          type="image/x-icon"
+           href="#{resource['img:favicon/favicon-npo.ico']}" />
+	
 	<h:outputStylesheet library="bootstrap" name="css/bootstrap.min.css" />
 	<h:outputStylesheet library="css" name="styles.css"  />
 </h:head>
@@ -149,7 +153,7 @@
 		</p:tab>
 
 		<!-- Schritt 3: Zusammenfassung -->
-		<p:tab id="zusammenfassung" title="Zusammenfassung">
+		<p:tab id="zusammenfassung" title="Zusammenfassung" styleClass="bg-info">
 			<p:panel header="Zusammenfassung der Meldung">
             <h:panelGrid columns="2" columnClasses="fw-bold, value" styleClass="mb-4">
 
@@ -173,22 +177,23 @@
 
                         </h:panelGrid>
 
-			<p:commandButton value="Geisternetz speichern"
+          	<p:commandButton value="Geisternetz speichern"
             				 icon="pi pi-save"
             				 action="#{geisternetzMeldenController.speichern}"
-            				 update="growl globalMessages" 
-            				 process="@form" /> <!-- Alle Eingaben speicher und verarbeiten. -->
-            				 
-			<p:button value="Zurück zur Startseite"
-            		  icon="pi pi-home"
-                      outcome="index"
-                      styleClass="ms-2" />
+            				 update="growl globalMessages"
+            				 styleClass="ms-1" 
+            				 process="@form" /> <!-- Alle Eingaben speicher und verarbeiten. -->			
                       
 			<p:button value="Weiteres Geisternetz melden" 
 			          icon="pi pi-plus"
 			          outcome="netz-melden"
 			          styleClass="ms-2" /> <!-- Da das Formular Viewscoped ist, wird die Seite neu geladen und alle Eingaben zurückgesetzt, sodass direkt ein neues Geisternetz gemeldet werden kann.  -->
-          
+          	
+          	<p:button value="Zurück zur Startseite"
+            		  icon="pi pi-home"
+                      outcome="index"
+                      styleClass="ms-2" />
+          	
                 </p:panel>
             </p:tab>
         </p:wizard>

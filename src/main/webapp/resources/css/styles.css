@@ -5,8 +5,8 @@ background: radial-gradient(circle,rgba(63, 179, 251, 1) 0%, rgba(70, 82, 252, 1
 }
 
 .header-logo { 
-   	max-width: 170px; /* Maximale Breite für das Header-Logo */
- 	max-height: 150px;
+   	max-width: 150px; /* Maximale Breite für das Header-Logo */
+ 	max-height: 130px;
  	height: auto;
  	width: auto;
 }
@@ -22,20 +22,73 @@ main {
   border-radius: 10px; /* Abgerundete Ecken für ein moderneres Aussehen */
 }
 
+.action-card {
+    border: none;
+    border-radius: 1rem;
+}
+
+.action-card .ui-card-body {
+    padding: 1.5rem;
+}
+
+.action-start-button {
+    min-width: 12rem;
+  	background-color: #0b3d5c !important;
+    border-color: #0b3d5c !important;
+    color: #ffffff !important;
+}
+
+/* Hover-Effekt für die Aktionsbutton, wenn er nicht deaktiviert ist */
+.action-start-button:hover:not(.ui-state-disabled) {
+    transform: translateY(-2px); /* Leichtes Anheben bei Hover */
+    box-shadow: 0 0.45rem 1rem rgba(0, 0, 0, 0.18); /* Dezentere Schatten für einen subtilen Effekt */
+}
+
+.info-card {
+    border: none;
+    border-radius: 1rem;
+    background-color: #f8f9fa;
+    box-shadow: 0 0.35rem 1rem rgba(0, 0, 0, 0.08);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.12);
+    border: 2px solid #3fb3fb ;
+}
+
+.info-icon {
+    font-size: 1.5rem;
+    color: #0d6efd;
+    margin-top: 0.2rem;
+}
+
+/* Responsive Anpassungen */
+@media (max-width: 768px) {
+    .action-card .ui-selectonebutton {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .action-card .ui-selectonebutton .ui-button {
+        width: 100%;
+    }
+
+    .action-start-button {
+        width: 100%;
+    }
+}
+
 .ui-message-error-icon,
 .ui-messages-error-icon {
     display: none !important; /* Versteckt die Fehlermeldungs-Icons, wei dies als Inline */
-  /*display: flex;			 /* Icon wird neben dem Text angezeigt
-    align-items: flex-start;
-    gap: 0.5rem; */
 }
 
 /*.tooltip-icon-small {
     font-size: 0.05rem !important; /* Sehr kleines Icon für Tooltips */
   /*  opacity: 0.5 !important; /* Leicht transparent für ein dezentes Aussehen */
-   /* vertical-align: text-top !important; /* Vertikal zentriert zum Text, super, text-top */
-
-
 .tooltip-icon-small {
     display: inline-block;
     font-size: 0.6em;
