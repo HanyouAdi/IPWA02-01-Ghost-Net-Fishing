@@ -20,3 +20,6 @@ Thumbs.db
 
 # Lokale Umgebungsdateien / Passwörter
 .env
+
+# Ordner docs 
+docs/

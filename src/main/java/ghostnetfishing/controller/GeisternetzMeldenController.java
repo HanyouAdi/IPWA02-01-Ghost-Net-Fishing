@@ -143,7 +143,7 @@ public class GeisternetzMeldenController implements Serializable {
             return null;
         }
 
-        return telefonnummer.trim().replaceAll("[\\s()-]", "");
+        return telefonnummer.trim().replaceAll("[\\s()-]", ""); // Entfernt Leerzeichen, Bindestriche und Klammern
     }
 
     public Geisternetz getGeisternetz() {
